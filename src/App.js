@@ -33,11 +33,22 @@ ScatterJS.scatter.connect("Test Dev").then(connected => {
 
     //getIdentity();
 
-    let eos = Eos({
-      keyProvider: '5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3',// private key
-      httpEndpoint: 'http://jungle.cryptolions.io',
-      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca',
+    let config = {
+      keyProvider: '5LLKiY1D3tCndrF5NW5tJa1enukCfrPNopUJwnkUmfErT8d11eN',
+      httpEndpoint: 'http://jungle.cryptolions.io:18888',
+      //httpEndpoint: 'https://api.eosnewyork.io',
+      //chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f'
+      //chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
+      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
+    }
+
+    let eos = Eos(config);
+
+    eos.getInfo((error, info) => {
+      console.log(error, info);
     });
+
+    console.log(eos);
 
     //console.log('User is connected to Scatter');
 
