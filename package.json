@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eosjs": "^16.0.9",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-scripts": "2.0.3"
+    "react-scripts": "2.0.3",
+    "scatter-js": "^2.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
