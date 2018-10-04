@@ -48,6 +48,15 @@ ScatterJS.scatter.connect("Test Dev").then(connected => {
       console.log(error, info);
     });
 
+    eos.getTableRows({
+        code:'localeosxxxl',
+        scope:'localeosxxxl',
+        table:'sellers',
+        json: true,
+    }).then(function(res) {
+        console.log(res);
+    });
+
     console.log(eos);
 
     //console.log('User is connected to Scatter');
