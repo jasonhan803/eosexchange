@@ -2,7 +2,6 @@ import React from 'react';
 import Eos from 'eosjs';
 import { Link } from 'react-router-dom';
 import SellerList from './../../components/SellerList'
-import Buying from './../../components/Buying'
 
 class BuySell extends React.Component {
 

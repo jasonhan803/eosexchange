@@ -1,6 +1,7 @@
 import React from 'react';
 import Eos from 'eosjs';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Buying from './../../components/Buying'
 
 class SellerList extends React.Component {
 
@@ -8,12 +9,20 @@ class SellerList extends React.Component {
     super(props);
     this.state = {
       sellers: [],
+      active: false
     };
   }
 
 
   componentWillMount() {
 
+  }
+
+  toggleBuying = () => {
+      console.log('here');
+      this.setState((prevState) => ({
+        active: !prevState.active
+      }));
   }
 
   componentDidMount() {
@@ -45,9 +54,12 @@ class SellerList extends React.Component {
           <p>Seller List</p>
           <ul>
           {sellers.map(m => {
-            return <li key={m.owner}><p>{m.owner} | {m.liquidbal.quantity} | <span onClick={this.props.onClick}>Buy</span></p></li>
+            return <li key={m.owner}><p>{m.owner} | {m.liquidbal.quantity} | <span onClick={this.toggleBuying}>Buy</span></p></li>
           })}
           </ul>
+          {this.state.active
+            && <Buying />
+          }
         </div>
       </div>
     );
