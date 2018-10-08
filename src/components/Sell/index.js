@@ -1,6 +1,8 @@
 import React from 'react';
 import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import Eos from 'eosjs';
+import TransferForm from './../../components/TransferForm';
+import SaleForm from './../../components/TransferForm';
 
 
 class Sell extends React.Component {
@@ -10,12 +12,9 @@ class Sell extends React.Component {
     this.state = {
       user: false,
       userName: '',
-      totalWeight: '',
-      amount: '',
-      paymentMethod: '',
-      price: '',
-      minLimit: '',
-      maxLimit: ''
+      registered: false,
+      hasMinimum: false,
+      liquiBal: ''
     };
   }
 
@@ -24,7 +23,8 @@ class Sell extends React.Component {
   }
 
   handleSubmit = (event) => {
-    console.log('A name was submitted: ' + this.state.value);
+    console.log('Registering the user');
+
 
     let config = {
       keyProvider: '5J2QfmKiwKB6NXrfnm2Y4FB3HhS8mqFGTzcSgFfz9TgRmqgDWdL', // What should this be for registering seller
@@ -42,8 +42,6 @@ class Sell extends React.Component {
         console.log(error);
       })
     })
-
-
     event.preventDefault();
   }
 
@@ -79,13 +77,28 @@ class Sell extends React.Component {
         port: 443
       }] }).then(identity => {
           console.log(identity, "identitySuccess")
-          eos.getAccount(identity.accounts[0].name)
-          .then(result => {
-            console.log(result)
-            this.setState({user: true, userName: identity.accounts[0].name, totalWeight: result.total_resources.cpu_weight })
-          })
-          .catch(error => console.error(error));
-          //this.setState({user: true, userName: identity.accounts[0].name })
+          let registered = false;
+          let hasMinimum = false;
+          let lb = '';
+          eos.getTableRows({
+              code:'localeosxxxl',
+              scope:'localeosxxxl',
+              table:'sellers',
+              json: true,
+          }).then(result => {
+            result.rows.forEach(function(el){
+              if (el.owner === identity.accounts[0].name) {
+                registered = true;
+              }
+              console.log(el.liquidbal.quantity)
+              if (el.liquidbal >= 0) {
+                console.log('here');
+                hasMinimum = true;
+              }
+              lb = el.liquidbal;
+            });
+              this.setState({user: true, userName: identity.accounts[0].name, registered: registered, hasMinimum: hasMinimum, liquiBal: lb })
+          });
         }).catch(error => {
           console.log(error, "identityCrisis")
         })
@@ -106,13 +119,21 @@ class Sell extends React.Component {
     let sellers = this.state.sellers;
 
     let sellerForm;
-    if (this.state.user) {
+    if (this.state.user && !this.state.registered) {
       sellerForm = (<form onSubmit={this.handleSubmit}>
         <p>{this.state.userName}</p>
         <p>{this.state.totalWeight}</p>
         <input type="submit" value="Register as Seller" />
       </form>)
-    } else {
+    } else if (this.state.user && this.state.registered) {
+      console.log(this.state.hasMinimum);
+      if (this.state.hasMinimum) {
+          sellerForm = (<SaleForm user={this.state.userName}/>)
+      } else {
+          sellerForm = (<TransferForm user={this.state.userName}/>)
+      }
+    }
+    else {
       sellerForm = (<div><p>Looking for Scatter...</p><p>No User Found on Scatter.  Scatter is required to use this dapp.</p></div>)
     }
 
