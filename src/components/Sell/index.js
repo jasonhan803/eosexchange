@@ -25,6 +25,25 @@ class Sell extends React.Component {
 
   handleSubmit = (event) => {
     console.log('A name was submitted: ' + this.state.value);
+
+    let config = {
+      keyProvider: '5J2QfmKiwKB6NXrfnm2Y4FB3HhS8mqFGTzcSgFfz9TgRmqgDWdL', // What should this be for registering seller
+      httpEndpoint: 'http://jungle.cryptolions.io:18888',
+      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
+    }
+    let eos = Eos(config);
+
+    eos.contract('localeosxxxl').then(contract => {
+      const options = { authorization: [ `chnkyfirede1@active` ] };
+      contract.regseller("chnkyfirede1", "eosio.token", "0.0000 EOS", options)
+      .then(results => {
+        console.log(results);
+      }).catch(error => {
+        console.log(error);
+      })
+    })
+
+
     event.preventDefault();
   }
 
@@ -91,27 +110,7 @@ class Sell extends React.Component {
       sellerForm = (<form onSubmit={this.handleSubmit}>
         <p>{this.state.userName}</p>
         <p>{this.state.totalWeight}</p>
-        <label>
-          Amount:
-          <input type="text" value={this.state.amount} onChange={this.handleChange} />
-        </label>
-        <label>
-          Payment Method:
-          <input type="text" value={this.state.paymentMethod} onChange={this.handleChange} />
-        </label>
-        <label>
-          Price/EOS:
-          <input type="text" value={this.state.price} onChange={this.handleChange} />
-        </label>
-        <label>
-          Min Limit:
-          <input type="text" value={this.state.minLimit} onChange={this.handleChange} />
-        </label>
-        <label>
-          Max Limit:
-          <input type="text" value={this.state.maxLimit} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Register as Seller" />
       </form>)
     } else {
       sellerForm = (<div><p>Looking for Scatter...</p><p>No User Found on Scatter.  Scatter is required to use this dapp.</p></div>)
