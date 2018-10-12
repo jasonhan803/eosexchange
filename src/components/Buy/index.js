@@ -60,7 +60,7 @@ class Buy extends React.Component {
       Header: 'Buy',
       accessor: 'saleId',
       Cell: props => (
-        <Link to={'/' + props.original.saleId}>BUY</Link>
+        <Link to={'buy/' + props.original.saleId}>BUY</Link>
       )
     }]
     console.log(sellers);

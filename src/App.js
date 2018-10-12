@@ -3,6 +3,7 @@ import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import Eos from 'eosjs';
 import logo from './logo.svg';
 import Buy from './components/Buy'
+import Buying from './components/Buying'
 import BuySell from './components/BuySell'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -23,6 +24,7 @@ class App extends Component {
               <Route exact path="/" component={BuySell} />
               <Route exact path="/sell" component={Sell} />
               <Route exact path="/buy" component={Buy} />
+              <Route exact path="/buy/:id" component={Buying} />
               <Route exact path="/confirmation" component={Confirmation} />
             </Switch>
           </main>
