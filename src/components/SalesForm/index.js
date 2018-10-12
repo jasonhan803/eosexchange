@@ -100,35 +100,35 @@ class SalesForm extends React.Component {
             <p className="lead">{this.props.user.liquidBal} : Liquid Balance</p>
           </div>
           <div className="row mb-4">
-          <div className="col-md-4 col-centered">
-          <form onSubmit={this.handleSubmit}>
-              <div className="mb-3">
-            <label>
-              Payment Method:
-            </label>
-              <input type="text" className="form-control" value={this.state.paymentMethod} name="paymentMethod" onChange={this.handleChange} />
-              </div>
-              <div className="mb-3">
-            <label>
-              Price:
-            </label>
-              <input type="text" className="form-control" value={this.state.price} name="price" onChange={this.handleChange} />
-              </div>
-              <div className="mb-3">
-            <label>
-              Minimum Amount Limit:
-            </label>
-              <input type="text" className="form-control" value={this.state.minLimit} name="minLimit" onChange={this.handleChange} />
-              </div>
-              <div className="mb-3">
-            <label>
-              Maximum Amount Limit:
-            </label>
-              <input type="text" className="form-control" value={this.state.maxLimit} name="maxLimit" onChange={this.handleChange} />
-              </div>
-            <input type="submit" value="Create Sale" />
-          </form>
-          </div>
+            <div className="col-md-4 col-centered">
+            <form onSubmit={this.handleSubmit}>
+                <div className="mb-3">
+              <label>
+                Payment Method:
+              </label>
+                <input type="text" className="form-control" value={this.state.paymentMethod} name="paymentMethod" onChange={this.handleChange} />
+                </div>
+                <div className="mb-3">
+              <label>
+                Price:
+              </label>
+                <input type="text" className="form-control" value={this.state.price} name="price" onChange={this.handleChange} />
+                </div>
+                <div className="mb-3">
+              <label>
+                Minimum Amount Limit:
+              </label>
+                <input type="text" className="form-control" value={this.state.minLimit} name="minLimit" onChange={this.handleChange} />
+                </div>
+                <div className="mb-3">
+              <label>
+                Maximum Amount Limit:
+              </label>
+                <input type="text" className="form-control" value={this.state.maxLimit} name="maxLimit" onChange={this.handleChange} />
+                </div>
+              <input type="submit" value="Create Sale" />
+            </form>
+            </div>
           </div>
         </div>
     );
