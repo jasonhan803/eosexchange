@@ -2,8 +2,9 @@ import React from 'react';
 import Eos from 'eosjs';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import Buying from './../../components/Buying'
+import axios from 'axios';
 
-class SellerList extends React.Component {
+class Buy extends React.Component {
 
   constructor(props) {
     super(props);
@@ -26,27 +27,19 @@ class SellerList extends React.Component {
   }
 
   componentDidMount() {
-    let config = {
-      keyProvider: '5LLKiY1D3tCndrF5NW5tJa1enukCfrPNopUJwnkUmfErT8d11eN',
-      httpEndpoint: 'http://jungle.cryptolions.io:18888',
-      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
-    }
-    let eos = Eos(config);
-
-
-    eos.getTableRows({
-        code:'localeosxxxl',
-        scope:'localeosxxxl',
-        table:'sellers',
-        json: true,
-    }).then(result => {
-        this.setState({sellers: result.rows})
-    });
+    axios.get(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`)
+      .then(res => {
+        console.log(res);
+        this.setState(() => ({
+          sellers: res.data.Items
+        }))
+      })
   }
 
 
   render() {
     let sellers = this.state.sellers;
+    console.log(sellers);
     // console.log(this.props);
     return (
       <div id="container">
@@ -54,16 +47,13 @@ class SellerList extends React.Component {
           <p>Seller List</p>
           <ul>
           {sellers.map(m => {
-            return <li key={m.owner}><p>{m.owner} | {m.liquidbal.quantity} | <span onClick={this.toggleBuying}>Buy</span></p></li>
+            return <li key={m.saleId}><p>{m.sellerId} | {m.paymentMethod} | {m.price} | {m.minLimit} | {m.maxLimit}</p></li>
           })}
           </ul>
-          {this.state.active
-            && <Buying />
-          }
         </div>
       </div>
     );
   }
 }
 
-export default SellerList;
+export default Buy;

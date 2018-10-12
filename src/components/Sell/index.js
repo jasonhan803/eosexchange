@@ -2,7 +2,7 @@ import React from 'react';
 import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import Eos from 'eosjs';
 import TransferForm from './../../components/TransferForm';
-import SaleForm from './../../components/TransferForm';
+import SalesForm from './../../components/SalesForm';
 
 
 class Sell extends React.Component {
@@ -14,7 +14,7 @@ class Sell extends React.Component {
       userName: '',
       registered: false,
       hasMinimum: false,
-      liquiBal: ''
+      liquidBal: ''
     };
   }
 
@@ -79,7 +79,11 @@ class Sell extends React.Component {
           console.log(identity, "identitySuccess")
           let registered = false;
           let hasMinimum = false;
-          let lb = '';
+          let liquidBal = '';
+          let user = {
+            userName: '',
+            liquidBal: ''
+          };
           eos.getTableRows({
               code:'localeosxxxl',
               scope:'localeosxxxl',
@@ -90,14 +94,16 @@ class Sell extends React.Component {
               if (el.owner === identity.accounts[0].name) {
                 registered = true;
               }
-              console.log(el.liquidbal.quantity)
-              if (el.liquidbal >= 0) {
-                console.log('here');
+              liquidBal = new Number(el.liquidbal.quantity.split(' EOS')[0]);
+              liquidBal = liquidBal.toPrecision(6);
+              if (liquidBal >= 0) {
                 hasMinimum = true;
               }
-              lb = el.liquidbal;
+              user.liquidBal = liquidBal;
             });
-              this.setState({user: true, userName: identity.accounts[0].name, registered: registered, hasMinimum: hasMinimum, liquiBal: lb })
+              user.userName = identity.accounts[0].name;
+              console.log(user);
+              this.setState({user: true, user: user, registered: registered, hasMinimum: hasMinimum })
           });
         }).catch(error => {
           console.log(error, "identityCrisis")
@@ -119,31 +125,35 @@ class Sell extends React.Component {
     let sellers = this.state.sellers;
 
     let sellerForm;
+    // If not Registered but found on Scatter
     if (this.state.user && !this.state.registered) {
       sellerForm = (<form onSubmit={this.handleSubmit}>
         <p>{this.state.userName}</p>
         <p>{this.state.totalWeight}</p>
         <input type="submit" value="Register as Seller" />
       </form>)
+    // If on Scatter and Registered
     } else if (this.state.user && this.state.registered) {
-      console.log(this.state.hasMinimum);
+      // Has more than zero in the account or to the minimum we set
       if (this.state.hasMinimum) {
-          sellerForm = (<SaleForm user={this.state.userName}/>)
+          sellerForm = (<SalesForm user={this.state.user} />)
       } else {
-          sellerForm = (<TransferForm user={this.state.userName}/>)
+          sellerForm = (<TransferForm user={this.state.user} />)
       }
     }
+    // Need to get on Scatter
     else {
-      sellerForm = (<div><p>Looking for Scatter...</p><p>No User Found on Scatter.  Scatter is required to use this dapp.</p></div>)
+      // sellerForm = (<div><p>Looking for Scatter...</p><p>No User Found on Scatter.  Scatter is required to use this dapp.</p></div>)
+      sellerForm = (
+        <div className="py-5 text-center">
+          <img className="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
+          <h2>Looking for Scatter...</h2>
+          <p>No User Found on Scatter.  Scatter is required to use this dapp.</p>
+        </div>)
     }
 
     return (
-      <div id="container">
-        <div className="element tile-2 home bg-change pages">
-          <p>Selling</p>
-            <p>{sellerForm}</p>
-        </div>
-      </div>
+        <div id="container">{sellerForm}</div>
     );
   }
 }

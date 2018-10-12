@@ -30,3 +30,16 @@
     transform: rotate(360deg);
   }
 }
+
+.my-2 {
+  margin-right: 6px;
+  margin-left: 6px;
+}
+
+.navbar {
+  background-color: #282c34;
+}
+
+.col-centered {
+  margin: 0 auto;
+}

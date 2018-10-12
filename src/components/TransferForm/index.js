@@ -57,8 +57,7 @@ class TransferForm extends React.Component {
       chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
     }
     let eos = Eos(config);
-
-    eos.getAccount(this.props.user)
+    eos.getAccount(this.props.user.userName)
     .then(result => {
       //console.log(result)
       this.setState({totalWeight: result.total_resources.cpu_weight })
@@ -69,14 +68,15 @@ class TransferForm extends React.Component {
 
 
   render() {
-    console.log(this.props.user);
+    //console.log(this.props.user);
 
     return (
       <div id="container">
         <div className="element tile-2 home bg-change pages">
-          <p>Sale Form</p>
-          <p>{this.props.user}</p>
+          <p>Transfer Form</p>
+          <p>{this.props.user.userName}</p>
           <p>{this.state.totalWeight} : Total Weight</p>
+          <p>{this.props.user.liquidBal} : Liquid Balance</p>
           <form onSubmit={this.handleSubmit}>
           <label>
               Amount:

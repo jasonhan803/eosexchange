@@ -1,34 +1,22 @@
 import React from 'react';
 import Eos from 'eosjs';
 import { Link } from 'react-router-dom';
-import SellerList from './../../components/SellerList'
+import SellerList from './../../components/SellerList';
 
 class BuySell extends React.Component {
 
-  constructor() {
-    super();
-    this.state = {
-      active: false,
-    };
-  }
-
-  toggleBuying = () => {
-    console.log('here');
- // function that will toggle active/false
-   this.setState((prevState) => ({
-     active: !prevState.active
-   }));
- }
-
-
   render() {
-    let sellers = this.state.sellers;
-    console.log(sellers);
     return (
-      <div>
-        <SellerList onClick={this.toggleBuying} />
-        <Buying active={this.state.active} />
-      </div>
+      <section className="jumbotron text-center">
+        <div className="container">
+          <h1 className="jumbotron-heading">EOS Exchange</h1>
+          <p className="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks do not simply skip over it entirely.</p>
+          <p>
+            <a href="/buy" className="btn btn-primary my-2">Buy</a>
+            <a href="/sell" className="btn btn-secondary my-2">Sell</a>
+          </p>
+        </div>
+      </section>
     );
   }
 }
