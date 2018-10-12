@@ -61,7 +61,7 @@ module.exports.addSeller = (event, context, callback) => {
     Item : {
 			"accountName" : body.accountName,
       "balance": 0,
-      "sales": {}
+      "sales": []
 		},
 		TableName : 'Sellers'
 	};

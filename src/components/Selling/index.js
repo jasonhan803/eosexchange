@@ -11,10 +11,10 @@ class Selling extends React.Component {
     super(props);
     this.state = {
       totalWeight: '',
-      paymentMethod: '',
-      price: '',
-      minLimit: '',
-      maxLimit: '',
+      paymentMethod: 'cash',
+      price: 5,
+      minLimit: 5,
+      maxLimit: 50,
       toConfirmation: false
     };
   }
@@ -39,9 +39,8 @@ class Selling extends React.Component {
   }
 
   handleSubmit = (event) => {
-
     const sale = {
-      user: this.props.user.userName,
+      user: this.props.identity.accounts[0].name,
       paymentMethod: this.state.paymentMethod,
       price: this.state.price,
       minLimit: this.state.minLimit,
@@ -73,7 +72,7 @@ class Selling extends React.Component {
       chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
     }
     let eos = Eos(config);
-    eos.getAccount(this.props.userName)
+    eos.getAccount(this.props.identity.accounts[0].name)
     .then(result => {
       this.setState({totalWeight: result.total_resources.cpu_weight })
     })
@@ -84,10 +83,11 @@ class Selling extends React.Component {
 
   render() {
     //console.log(this.props.user);
+    console.log(this.props);
     if (this.state.toConfirmation === true) {
       return <Redirect to={{
         pathname: "/confirmation",
-        state: { user: this.props.userName }
+        state: { user: this.props.identity.accounts[0].name }
       }} />
     }
 

@@ -81,9 +81,11 @@ module.exports.addSale = (event, context, callback) => {
 		TableName : 'Sales'
 	};
 
+  // Add Sale Item to Sale Table
   documentClient.put(params, function(err, data){
     console.log(data);
     console.log(err);
+    console.log('made it here');
     const response = {
       statusCode: 200,
       headers: {
@@ -95,10 +97,42 @@ module.exports.addSale = (event, context, callback) => {
       }),
     };
 
+    const sale = {
+      saleId: params.Item.saleId,
+      status: params.Item.status,
+      timeStamp: params.Item.dateCreated
+    }
+
+    var sellerParams = {
+      TableName: 'Sellers',
+      Key: {
+        "accountName": body.sale.user
+      },
+      ReturnValues: 'UPDATED_NEW',
+      UpdateExpression: 'set #sales = list_append(if_not_exists(#sales, :empty_list), :sale)',
+      ExpressionAttributeNames: {
+        '#sales': 'sales'
+      },
+      ExpressionAttributeValues: {
+        ':sale': [sale],
+        ':empty_list': []
+      }
+    }
+
 		if (err) {
 		    callback(err, null);
 		} else {
-		    callback(null, response);
+        documentClient.update(sellerParams, function(err, data){
+          console.log(data);
+          console.log(err);
+          console.log('and made it here');
+          if (err) {
+      		    callback(err, null);
+      		} else {
+      		    callback(null, response);
+      		}
+        });
+		    //callback(null, response);
 		}
 	});
 };
