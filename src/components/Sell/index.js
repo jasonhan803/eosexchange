@@ -3,6 +3,7 @@ import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import Eos from 'eosjs';
 import TransferForm from './../../components/TransferForm';
 import Selling from './../../components/Selling';
+import RegisteredSeller from './../../components/RegisteredSeller';
 import Scatter from './../../components/Scatter'
 
 
@@ -12,17 +13,24 @@ class Sell extends React.Component {
     super(props);
     this.state = {
       user: false,
-      userName: '',
+      identity: '',
       scatterRegistered: false,
+      sellerRegistered: false,
       hasMinimum: false,
       liquidBal: ''
     };
   }
 
-  scatterResults = (registered, userName) => {
+  scatterResults = (registered, identity) => {
     this.setState({
       scatterRegistered: registered,
-      userName: userName
+      identity
+    })
+  }
+
+  registeredResults = (registered) => {
+    this.setState({
+      sellerRegistered: registered,
     })
   }
 
@@ -46,7 +54,10 @@ class Sell extends React.Component {
         <div id="container">
           <Scatter callback={this.scatterResults} type={"Sell"} />
           {this.state.scatterRegistered &&
-            <Selling id={this.state.userName } />
+              <RegisteredSeller callback={this.registeredResults} identity={this.state.identity } />
+          }
+          {this.state.sellerRegistered &&
+              <Selling identity={this.state.identity } />
           }
         </div>
     );

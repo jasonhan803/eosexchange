@@ -20,9 +20,7 @@ module.exports.getSeller = (event, context, callback) => {
           "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
           "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
         },
-        body: JSON.stringify({
-          data: data
-        }),
+        body: JSON.stringify(data),
       };
 
   		if (err) {
@@ -56,9 +54,12 @@ module.exports.getSeller = (event, context, callback) => {
 };
 
 module.exports.addSeller = (event, context, callback) => {
+
+  const body = JSON.parse(event.body);
+  console.log(body);
   var params = {
     Item : {
-			"accountName" : event.pathParameters.name,
+			"accountName" : body.accountName,
       "balance": 0,
       "sales": {}
 		},
@@ -75,7 +76,7 @@ module.exports.addSeller = (event, context, callback) => {
         "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
       },
       body: JSON.stringify({
-        data: data
+          message: 'success'
       }),
     };
 

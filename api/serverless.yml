@@ -80,7 +80,7 @@ functions:
 
     events:
       - http:
-          path: sellers/{name}
+          path: sellers/
           method: post
           cors: true
 

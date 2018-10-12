@@ -52,7 +52,7 @@ class Scatter extends React.Component {
       }] }).then(identity => {
           console.log(identity, "identitySuccess");
           // might have to passback userName
-          this.props.callback(true, identity.accounts[0].name);
+          this.props.callback(true, identity);
           this.setState({isScatter: true, userName: identity.accounts[0].name })
         }).catch(error => {
           console.log(error, "identityCrisis")
@@ -92,7 +92,11 @@ class Scatter extends React.Component {
     }
 
     return (
-        <div id="container">{userForm}</div>
+        <div className="row">
+          <div className="col-lg-12">
+            {userForm}
+          </div>
+        </div>
     );
   }
 }
