@@ -5,7 +5,7 @@ import Eos from 'eosjs';
 import axios from 'axios';
 
 
-class SalesForm extends React.Component {
+class Selling extends React.Component {
 
   constructor(props) {
     super(props);
@@ -73,7 +73,7 @@ class SalesForm extends React.Component {
       chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
     }
     let eos = Eos(config);
-    eos.getAccount(this.props.user.userName)
+    eos.getAccount(this.props.userName)
     .then(result => {
       this.setState({totalWeight: result.total_resources.cpu_weight })
     })
@@ -87,18 +87,12 @@ class SalesForm extends React.Component {
     if (this.state.toConfirmation === true) {
       return <Redirect to={{
         pathname: "/confirmation",
-        state: { user: this.props.user.userName }
+        state: { user: this.props.userName }
       }} />
     }
 
     return (
         <div>
-          <div className="py-5 text-center">
-            <img className="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-            <h2>Ready to Sell {this.props.user.userName}?</h2>
-            <p className="lead">{this.state.totalWeight} : Total Weight</p>
-            <p className="lead">{this.props.user.liquidBal} : Liquid Balance</p>
-          </div>
           <div className="row mb-4">
             <div className="col-md-4 col-centered">
             <form onSubmit={this.handleSubmit}>
@@ -135,4 +129,4 @@ class SalesForm extends React.Component {
   }
 }
 
-export default SalesForm;
+export default Selling;

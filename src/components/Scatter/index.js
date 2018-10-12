@@ -52,7 +52,7 @@ class Scatter extends React.Component {
       }] }).then(identity => {
           console.log(identity, "identitySuccess");
           // might have to passback userName
-          this.props.callback(true);
+          this.props.callback(true, identity.accounts[0].name);
           this.setState({isScatter: true, userName: identity.accounts[0].name })
         }).catch(error => {
           console.log(error, "identityCrisis")
@@ -77,7 +77,7 @@ class Scatter extends React.Component {
       userForm = (
         <div className="py-5 text-center">
           <img className="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-          <h2>Ready to Buy {this.state.userName}?</h2>
+          <h2>Ready to {this.props.type} {this.state.userName}?</h2>
         </div>
       )
     }

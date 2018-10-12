@@ -58,7 +58,9 @@ module.exports.getSeller = (event, context, callback) => {
 module.exports.addSeller = (event, context, callback) => {
   var params = {
     Item : {
-			"accountName" : event.pathParameters.name
+			"accountName" : event.pathParameters.name,
+      "balance": 0,
+      "sales": {}
 		},
 		TableName : 'Sellers'
 	};

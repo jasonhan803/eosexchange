@@ -15,8 +15,7 @@ class Buying extends React.Component {
     };
   }
 
-  scatterResults = (registered) => {
-    console.log(registered);
+  scatterResults = (registered, userName) => {
     this.setState({
       scatterRegistered: registered
     })
@@ -37,7 +36,7 @@ class Buying extends React.Component {
     const saleId = params.id;
     return (
       <div id="container">
-        <Scatter callback={this.scatterResults} />
+        <Scatter callback={this.scatterResults} type={"Buy"}/>
         {this.state.scatterRegistered &&
           <SaleInfo id={saleId} />
         }

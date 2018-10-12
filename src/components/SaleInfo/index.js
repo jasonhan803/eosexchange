@@ -17,12 +17,15 @@ class SaleInfo extends React.Component {
   }
 
   handleChange = (event) => {
+    let usd, eos
     switch(event.target.name) {
       case 'usd':
-        this.setState({usd: event.target.value});
+        eos = (parseInt(event.target.value) / parseInt(this.state.saleItem.price));
+        this.setState({usd: event.target.value, eos: eos});
         break;
       case 'eos':
-        this.setState({eos: event.target.value});
+        usd = (parseInt(event.target.value) * parseInt(this.state.saleItem.price));
+        this.setState({eos: event.target.value, usd: usd});
         break;
       default:
         break;
@@ -57,7 +60,7 @@ class SaleInfo extends React.Component {
             </div>
             <div className="col-md-6 text-left">
               <p>{this.state.saleItem.sellerId}</p>
-              <p>{this.state.saleItem.price} USD</p>
+              <p>{this.state.saleItem.price} USD/EOS</p>
               <p>{this.state.saleItem.paymentMethod}</p>
               <p>{this.state.saleItem.minLimit} - {this.state.saleItem.maxLimit} USD</p>
               <p></p>
