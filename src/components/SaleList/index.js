@@ -16,7 +16,6 @@ class SaleList extends React.Component {
   componentDidMount() {
     axios.get(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`)
       .then(res => {
-        console.log(res);
         this.setState(() => ({
           sellers: res.data.Items
         }))

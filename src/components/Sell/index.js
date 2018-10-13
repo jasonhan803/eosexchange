@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Selling from './../../components/Selling';
-import Scatter from './../../components/Scatter';
 import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
 
 class Sell extends React.Component {
@@ -36,7 +35,6 @@ class Sell extends React.Component {
 
     return (
         <div id="container">
-          <Scatter {...props} />
           {this.props.identity.contractRegistered &&
               <Selling {...props} />
           }

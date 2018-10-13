@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Eos from 'eosjs';
-import Scatter from './../../components/Scatter'
 import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
@@ -71,16 +70,6 @@ class TransferForm extends React.Component {
 
   render() {
 
-    const props = {
-      scatterRegistered: this.props.identity.scatterRegistered,
-      identity: this.props.identity.identity,
-      contractRegistered: this.props.identity.contractRegistered,
-      account: this.props.identity.account,
-      type: 'Transfer',
-      scatterCallback: this.scatterResults,
-      contractCallback: this.contractResults
-    }
-
     if (this.state.toConfirmation === true) {
       return <Redirect to={{
         pathname: "/confirmation",
@@ -90,8 +79,6 @@ class TransferForm extends React.Component {
 
     return (
       <div id="container">
-        <Scatter {...props} />
-
         {this.props.identity.contractRegistered &&
             <div className="row mb-4">
               <div className="col-md-4 col-centered">

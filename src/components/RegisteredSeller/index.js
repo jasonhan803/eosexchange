@@ -1,7 +1,6 @@
 import React from 'react';
 import Eos from 'eosjs';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 
 // User needs to register in the contract and on the DB
@@ -76,24 +75,14 @@ class RegisteredSeller extends React.Component {
 
   render() {
     return (
-      <div className="row">
-        <div className="col-lg-12 mb-4">
+          <div>
           {this.props.contractRegistered &&
-            <div>
-              <p>Current Balance - ${this.props.account.balance}</p>
-              {this.props.type !== "Transfer" &&
-                <p>Need more funds in the contract - <Link to="/transfer">Transfer Here</Link></p>
-              }
-            </div>
+              <a className="nav-link" href="/">Welcome, {this.props.identity.accounts[0].name}</a>
           }
           {!this.props.contractRegistered &&
-            <div>
-              <h4>Sellers need to Register with the Contract</h4>
-              <p>Register with one click <span onClick={this.registerSeller}>here</span></p>
-            </div>
+              <a className="nav-link" href="/">Register with Contract</a>
           }
-        </div>
-      </div>
+          </div>
     );
   }
 }

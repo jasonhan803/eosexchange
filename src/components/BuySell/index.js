@@ -1,6 +1,4 @@
 import React from 'react';
-import Eos from 'eosjs';
-import { Link } from 'react-router-dom';
 
 class BuySell extends React.Component {
 

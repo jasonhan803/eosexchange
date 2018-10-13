@@ -52,28 +52,18 @@ class Scatter extends React.Component {
     // Seller/Buyer is on Scatter
     if (this.props.scatterRegistered) {
       userForm = (
-        <div className="py-5 text-center">
-          <img className="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-          <h2>Ready to {this.props.type} {this.state.userName}?</h2>
           <RegisteredSeller {...this.props} />
-        </div>
       )
     }
     // Need to get on Scatter
     else {
       userForm = (
-        <div className="py-5 text-center">
-          <img className="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-          <h2>Looking for Scatter...</h2>
-          <p>No User Found on Scatter.  Scatter is required to use this dapp.</p>
-        </div>)
+        <a className="nav-link" href="/">Scatter</a>)
     }
 
     return (
-        <div className="row">
-          <div className="col-lg-12">
-            {userForm}
-          </div>
+        <div>
+          {userForm}
         </div>
     );
   }
