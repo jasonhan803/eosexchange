@@ -9,6 +9,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Confirmation from './components/Confirmation'
 import Sell from './components/Sell'
+import TransferForm from './components/TransferForm'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,6 +26,7 @@ class App extends Component {
               <Route exact path="/sell" component={Sell} />
               <Route exact path="/buy" component={Buy} />
               <Route exact path="/buy/:id" component={Buying} />
+              <Route exact path="/transfer" component={TransferForm} />
               <Route exact path="/confirmation" component={Confirmation} />
             </Switch>
           </main>

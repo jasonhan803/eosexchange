@@ -87,3 +87,43 @@ module.exports.addSeller = (event, context, callback) => {
 		}
 	});
 };
+
+module.exports.updateSeller = (event, context, callback) => {
+
+  const body = JSON.parse(event.body);
+  console.log(body);
+  console.log(typeof(Number(body.balance)));
+
+  var params = {
+    TableName: 'Sellers',
+    Key: {
+      "accountName": body.accountName
+    },
+    ReturnValues: 'UPDATED_NEW',
+    UpdateExpression: 'ADD balance :b',
+    ExpressionAttributeValues: {
+      ':b': Number(body.balance)
+    }
+  }
+
+  documentClient.update(params, function(err, data){
+    console.log(data);
+    console.log(err);
+    const response = {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+        "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
+      },
+      body: JSON.stringify({
+          message: 'success'
+      }),
+    };
+
+    if (err) {
+        callback(err, null);
+    } else {
+        callback(null, response);
+    }
+  });
+};

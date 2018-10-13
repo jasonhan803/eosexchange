@@ -84,6 +84,15 @@ functions:
           method: post
           cors: true
 
+  updateSeller:
+    handler: sellers/sellers.updateSeller
+
+    events:
+      - http:
+          path: sellers/
+          method: put
+          cors: true
+
   getSale:
     handler: sales/sales.getSales
 

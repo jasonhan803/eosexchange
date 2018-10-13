@@ -71,6 +71,7 @@ class Scatter extends React.Component {
 
 
   render() {
+    console.log(this.props);
     let userForm;
     // Seller/Buyer is on Scatter
     if (this.state.isScatter) {

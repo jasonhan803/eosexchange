@@ -2,6 +2,7 @@ import React from 'react';
 import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import Eos from 'eosjs';
 import axios from 'axios';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 
 
 // User needs to register in the contract and on the DB
@@ -14,7 +15,8 @@ class RegisteredSeller extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isRegistered: false
+      isRegistered: false,
+      userData: {}
     };
   }
 
@@ -71,19 +73,24 @@ class RegisteredSeller extends React.Component {
     .then(res => {
       if(!this.isEmpty(res.data)) {
         this.props.callback(true);
-        this.setState({isRegistered: true});
+        this.setState({isRegistered: true, userData: res.data});
       }
     })
   }
 
 
   render() {
-
+    console.log(this.props);
     return (
       <div className="row">
         <div className="col-lg-12 mb-4">
           {this.state.isRegistered &&
-            <div>Will be user info</div>
+            <div>
+              <p>Current Balance - ${this.state.userData.Item.balance}</p>
+              {this.props.type !== "Transfer" &&
+                <p>Need more funds in the contract - <Link to="/transfer">Transfer Here</Link></p>
+              }
+            </div>
           }
           {!this.state.isRegistered &&
             <div>
