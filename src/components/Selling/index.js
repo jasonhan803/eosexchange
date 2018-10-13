@@ -1,7 +1,5 @@
 import React from 'react';
-import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import { Redirect } from 'react-router-dom';
-import Eos from 'eosjs';
 import axios from 'axios';
 
 
@@ -10,7 +8,6 @@ class Selling extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      totalWeight: '',
       paymentMethod: 'cash',
       price: 5,
       minLimit: 5,
@@ -60,30 +57,8 @@ class Selling extends React.Component {
   }
 
 
-  componentWillMount() {
-
-  }
-
-  componentDidMount() {
-
-    let config = {
-      keyProvider: '5LLKiY1D3tCndrF5NW5tJa1enukCfrPNopUJwnkUmfErT8d11eN',
-      httpEndpoint: 'http://jungle.cryptolions.io:18888',
-      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
-    }
-    let eos = Eos(config);
-    eos.getAccount(this.props.identity.accounts[0].name)
-    .then(result => {
-      this.setState({totalWeight: result.total_resources.cpu_weight })
-    })
-    .catch(error => console.error(error));
-
-  }
-
-
   render() {
-    //console.log(this.props.user);
-    console.log(this.props);
+
     if (this.state.toConfirmation === true) {
       return <Redirect to={{
         pathname: "/confirmation",

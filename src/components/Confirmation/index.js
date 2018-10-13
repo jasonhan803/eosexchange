@@ -1,5 +1,4 @@
 import React from 'react';
-import Eos from 'eosjs';
 
 class Confirmation extends React.Component {
 

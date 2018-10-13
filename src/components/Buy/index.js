@@ -1,86 +1,64 @@
 import React from 'react';
-import Eos from 'eosjs';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Scatter from './../../components/Scatter'
 import Buying from './../../components/Buying'
-import axios from 'axios';
-import ReactTable from "react-table";
-import 'react-table/react-table.css'
+import { connect } from 'react-redux';
+import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
+
 
 class Buy extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      sellers: [],
-      active: false
+      scatterRegistered: false,
+      saleId: ''
     };
   }
 
-
-  componentWillMount() {
-
+  scatterResults = (registered, identity) => {
+    this.props.updateIdentity(identity);
+    this.props.registerScatter();
   }
 
-  toggleBuying = () => {
-      console.log('here');
-      this.setState((prevState) => ({
-        active: !prevState.active
-      }));
-  }
-
-  componentDidMount() {
-    axios.get(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`)
-      .then(res => {
-        console.log(res);
-        this.setState(() => ({
-          sellers: res.data.Items
-        }))
-      })
+  contractResults = (registered, accountDetails) => {
+    this.props.updateAccount(accountDetails);
+    this.props.registerContract();
   }
 
 
   render() {
-    let sellers = this.state.sellers;
-    const columns = [{
-      Header: 'Seller',
-      accessor: 'sellerId' // String-based value accessors!
-    }, {
-      Header: 'Payment Method',
-      accessor: 'paymentMethod',
-    }, {
-      Header: 'Price / BTC',
-      accessor: 'price'
-    }, {
-      id: 'limits', // Required because our accessor is not a string
-      Header: 'Limits',
-      Cell: props => (
-        <p>{props.original.minLimit + '-' + props.original.maxLimit} USD</p>
-      )
-    }, {
-      Header: 'Buy',
-      accessor: 'saleId',
-      Cell: props => (
-        <Link to={'buy/' + props.original.saleId}>BUY</Link>
-      )
-    }]
-    console.log(sellers);
+    const props = {
+      scatterRegistered: this.props.identity.scatterRegistered,
+      identity: this.props.identity.identity,
+      contractRegistered: this.props.identity.contractRegistered,
+      account: this.props.identity.account,
+      type: 'Buy',
+      scatterCallback: this.scatterResults,
+      contractCallback: this.contractResults
+    }
+
+    const { match: { params } } = this.props;
+    const saleId = params.id;
+
     return (
       <div id="container">
-        <div className="py-5 text-center">
-          <img className="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-          <h2>Seller List</h2>
-        </div>
-        <div className="row mb-4">
-          <div className="col-md-8 col-centered">
-          <ReactTable
-            data={sellers}
-            columns={columns}
-          />
-          </div>
-        </div>
+        <Scatter {...props} />
+        {this.props.identity.contractRegistered &&
+          <Buying id={saleId} />
+        }
       </div>
     );
   }
 }
 
-export default Buy;
+const mapStateToProps = state => ({
+  identity: state.identityReducer
+})
+
+const mapDispatchToProps = dispatch => ({
+  registerScatter: () => dispatch(registerScatter()),
+  registerContract: () => dispatch(registerContract()),
+  updateIdentity: (identity) => dispatch(updateIdentity(identity)),
+  updateAccount: (accountDetails) => dispatch(updateAccount(accountDetails))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Buy);

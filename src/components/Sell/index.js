@@ -1,67 +1,59 @@
 import React from 'react';
-import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
-import Eos from 'eosjs';
-import TransferForm from './../../components/TransferForm';
+import { connect } from 'react-redux';
 import Selling from './../../components/Selling';
-import RegisteredSeller from './../../components/RegisteredSeller';
-import Scatter from './../../components/Scatter'
-
+import Scatter from './../../components/Scatter';
+import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
 
 class Sell extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      user: false,
-      identity: '',
-      scatterRegistered: false,
-      sellerRegistered: false,
-      hasMinimum: false,
-      liquidBal: ''
+
     };
   }
 
   scatterResults = (registered, identity) => {
-    this.setState({
-      scatterRegistered: registered,
-      identity
-    })
+    this.props.updateIdentity(identity);
+    this.props.registerScatter();
   }
 
-  registeredResults = (registered) => {
-    this.setState({
-      sellerRegistered: registered,
-    })
+  contractResults = (registered, accountDetails) => {
+    this.props.updateAccount(accountDetails);
+    this.props.registerContract();
   }
-
-  handleChange = (event) => {
-    //this.setState({value: event.target.value});
-  }
-
-
-  componentWillMount() {
-
-  }
-
-  componentDidMount() {
-
-  }
-
 
   render() {
+    const props = {
+      scatterRegistered: this.props.identity.scatterRegistered,
+      identity: this.props.identity.identity,
+      contractRegistered: this.props.identity.contractRegistered,
+      account: this.props.identity.account,
+      type: 'Sell',
+      scatterCallback: this.scatterResults,
+      contractCallback: this.contractResults
+    }
 
     return (
         <div id="container">
-          <Scatter callback={this.scatterResults} type={"Sell"} />
-          {this.state.scatterRegistered &&
-              <RegisteredSeller callback={this.registeredResults} identity={this.state.identity } />
-          }
-          {this.state.sellerRegistered &&
-              <Selling identity={this.state.identity } />
+          <Scatter {...props} />
+          {this.props.identity.contractRegistered &&
+              <Selling {...props} />
           }
         </div>
     );
   }
 }
 
-export default Sell;
+const mapStateToProps = state => ({
+  identity: state.identityReducer
+})
+
+const mapDispatchToProps = dispatch => ({
+  registerScatter: () => dispatch(registerScatter()),
+  registerContract: () => dispatch(registerContract()),
+  updateIdentity: (identity) => dispatch(updateIdentity(identity)),
+  updateAccount: (accountDetails) => dispatch(updateAccount(accountDetails))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sell);

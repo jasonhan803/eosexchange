@@ -1,8 +1,8 @@
 import React from 'react';
-import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
+import { connect } from 'react-redux';
 import Eos from 'eosjs';
 import Scatter from './../../components/Scatter'
-import RegisteredSeller from './../../components/RegisteredSeller';
+import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 
@@ -12,23 +12,19 @@ class TransferForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      identity: {},
       transferAmount: 0,
       toConfirmation: false
     };
   }
 
   scatterResults = (registered, identity) => {
-    this.setState({
-      scatterRegistered: registered,
-      identity
-    })
+    this.props.updateIdentity(identity);
+    this.props.registerScatter();
   }
 
-  registeredResults = (registered) => {
-    this.setState({
-      sellerRegistered: registered,
-    })
+  contractResults = (registered, accountDetails) => {
+    this.props.updateAccount(accountDetails);
+    this.props.registerContract();
   }
 
   handleChange = (event) => {
@@ -38,7 +34,7 @@ class TransferForm extends React.Component {
   handleSubmit = (event) => {
     console.log('Transferring funds');
     let balance = Number(this.state.transferAmount).toPrecision(5);
-    let accountName = this.state.identity.accounts[0].name;
+    let accountName = this.props.identity.account.accountName;
 
     let config = {
       keyProvider: '5J2QfmKiwKB6NXrfnm2Y4FB3HhS8mqFGTzcSgFfz9TgRmqgDWdL', // What should this be for registering seller
@@ -73,33 +69,31 @@ class TransferForm extends React.Component {
     event.preventDefault();
   }
 
-
-  componentWillMount() {
-
-  }
-
-  componentDidMount() {
-
-  }
-
-
   render() {
+
+    const props = {
+      scatterRegistered: this.props.identity.scatterRegistered,
+      identity: this.props.identity.identity,
+      contractRegistered: this.props.identity.contractRegistered,
+      account: this.props.identity.account,
+      type: 'Transfer',
+      scatterCallback: this.scatterResults,
+      contractCallback: this.contractResults
+    }
 
     if (this.state.toConfirmation === true) {
       return <Redirect to={{
         pathname: "/confirmation",
-        state: { user: this.state.identity.accounts[0].name }
+        state: { user: this.props.identity.account.accountName }
       }} />
     }
 
     return (
       <div id="container">
-        <Scatter callback={this.scatterResults} type={"Transfer"} />
-        {this.state.scatterRegistered &&
-            <RegisteredSeller callback={this.registeredResults} identity={this.state.identity } type={'Transfer'} />
-        }
-        {this.state.sellerRegistered &&
-            <div className="rowmb-4">
+        <Scatter {...props} />
+
+        {this.props.identity.contractRegistered &&
+            <div className="row mb-4">
               <div className="col-md-4 col-centered">
                 <form onSubmit={this.handleSubmit}>
                 <div className="mb-3">
@@ -120,4 +114,15 @@ class TransferForm extends React.Component {
   }
 }
 
-export default TransferForm;
+const mapStateToProps = state => ({
+  identity: state.identityReducer
+})
+
+const mapDispatchToProps = dispatch => ({
+  registerScatter: () => dispatch(registerScatter()),
+  registerContract: () => dispatch(registerContract()),
+  updateIdentity: (identity) => dispatch(updateIdentity(identity)),
+  updateAccount: (accountDetails) => dispatch(updateAccount(accountDetails))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransferForm);
