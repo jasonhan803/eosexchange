@@ -47,11 +47,12 @@ class TransferForm extends React.Component {
     }
     let eos = Eos(config);
 
-    // Deposit funds to the contract
+    // Connect with the contract
     eos.contract('eosio.token').then(contract => {
       const options = { authorization: [ accountName + `@active` ] };
       const eos = Number(this.state.transferAmount).toPrecision(5) + " EOS";
 
+      // Deposit funds to the contract
       contract.transfer(accountName, "localeosxxxl", eos, options)
       .then(results => {
         console.log(results);
@@ -105,6 +106,7 @@ class TransferForm extends React.Component {
                 <label>
                     Amount:
                  </label>
+                 <p>*Only whole numbers less than 10 for now - need to fix</p>
                  <input type="text" value={this.state.amount} onChange={this.handleChange} />
                  </div>
                  <input type="submit" value="Transfer" />

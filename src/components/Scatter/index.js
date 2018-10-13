@@ -2,7 +2,6 @@ import React from 'react';
 import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import Eos from 'eosjs';
 import TransferForm from './../../components/TransferForm';
-import SalesForm from './../../components/SalesForm';
 
 
 class Scatter extends React.Component {

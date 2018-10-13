@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import Eos from 'eosjs';
+import { connect } from 'react-redux';
 import logo from './logo.svg';
 import Buy from './components/Buy'
 import Buying from './components/Buying'
@@ -10,12 +11,18 @@ import Footer from './components/Footer'
 import Confirmation from './components/Confirmation'
 import Sell from './components/Sell'
 import TransferForm from './components/TransferForm'
+import { simpleAction } from './actions/identity'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
+  simpleAction = (event) => {
+    this.props.simpleAction();
+  }
+
   render() {
+    console.log(this.props);
     return (
       <Router>
         <div className="App">
@@ -37,4 +44,12 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  ...state
+})
+
+const mapDispatchToProps = dispatch => ({
+ simpleAction: () => dispatch(simpleAction())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

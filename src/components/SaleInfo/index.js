@@ -32,6 +32,42 @@ class SaleInfo extends React.Component {
     }
   }
 
+  handleSubmit = (event) => {
+
+    let config = {
+      keyProvider: '5J2QfmKiwKB6NXrfnm2Y4FB3HhS8mqFGTzcSgFfz9TgRmqgDWdL', // What should this be for registering seller
+      httpEndpoint: 'http://jungle.cryptolions.io:18888',
+      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
+    }
+    let eos = Eos(config);
+
+    let accountName='chnkyfirede1';
+
+    // Connect with the contract
+    eos.contract('localeosxxxl').then(contract => {
+      const options = { authorization: [ accountName + `@active` ] };
+
+      // Deposit funds to the contract
+      contract.reserve(accountName, "chnkyfiredev", "eosio.token", "1.0000 EOS", options)
+      .then(results => {
+        console.log(results);
+        // Let's just add this amount to the DB balance
+        /*axios.put(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sellers`, { balance, accountName })
+          .then(res => {
+            if (res.data.message === "success") {
+              this.setState(() => ({
+                toConfirmation: true
+              }))
+            }
+          })*/
+      }).catch(error => {
+        console.log(error);
+      })
+    })
+
+    event.preventDefault();
+  }
+
   componentWillMount() {
 
   }
@@ -82,7 +118,7 @@ class SaleInfo extends React.Component {
                   <input type="text" className="form-control" value={this.state.eos} name="eos" onChange={this.handleChange} />
                 </div>
               </div>
-              <input type="submit" value="Request To Purchase" />
+              <input type="submit" value="Request To Reserve" />
             </form>
           </div>
         </div>
