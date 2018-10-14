@@ -26,7 +26,6 @@ class SaleList extends React.Component {
       })
   }
 
-
   render() {
     let sellers = this.state.sellers;
     const columns = [{

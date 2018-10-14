@@ -8,7 +8,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Confirmation from './components/Confirmation'
 import Dashboard from './components/Dashboard'
-import Sale from './components/Sale'
+import DealInfo from './components/DealInfo'
 import Sell from './components/Sell'
 import Transfer from './components/Transfer'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
@@ -30,7 +30,7 @@ class App extends Component {
               <Route exact path="/transfer" component={Transfer} />
               <Route exact path="/confirmation" component={Confirmation} />
               <Route exact path="/dashboard" component={Dashboard} />
-              <Route exact path="/dashboard/:id" component={Sale} />
+              <Route exact path="/dashboard/:id" component={DealInfo} />
             </Switch>
           </main>
           <Footer />

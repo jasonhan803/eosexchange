@@ -6,20 +6,26 @@ class Buy extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scatterRegistered: false,
-      saleId: ''
     };
   }
 
   render() {
 
     const { match: { params } } = this.props;
-    const saleId = params.id;
+
+    const props = {
+      scatterRegistered: this.props.identity.scatterRegistered,
+      identity: this.props.identity.identity,
+      contractRegistered: this.props.identity.contractRegistered,
+      account: this.props.identity.account,
+      type: 'Buy',
+      saleId: params.id
+    }
 
     return (
       <div id="container">
         {this.props.identity.contractRegistered &&
-          <Buying id={saleId} />
+          <Buying {...props} />
         }
       </div>
     );

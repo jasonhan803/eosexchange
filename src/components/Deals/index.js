@@ -23,12 +23,15 @@ class Deals extends React.Component {
   }
 
   render() {
+    console.log(this.state.sales);
     return (
         <div>
+          <h2>Selling Deals</h2>
           {this.props.identity.contractRegistered &&
             this.state.sales.map((sale) =>
-              <li key={sale.saleId}><Link to={"/dashboard/" + sale.saleId}>{sale.saleId}</Link> | {sale.status}</li>)
+              <p key={sale.saleId}><Link to={"/dashboard/" + sale.saleId}>{sale.saleId}</Link> | {sale.sale_status} | {sale.timeStamp}</p>)
           }
+          <h2>Buying Deals</h2>
         </div>
     );
   }

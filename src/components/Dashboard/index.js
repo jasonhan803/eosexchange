@@ -17,7 +17,6 @@ class Dashboard extends React.Component {
         <div id="container">
           {this.props.identity.contractRegistered &&
               <div>
-                <p>Open Buying Info</p>
                 <Deals {...this.props.identity}/>
               </div>
           }

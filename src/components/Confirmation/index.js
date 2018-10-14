@@ -3,7 +3,6 @@ import React from 'react';
 class Confirmation extends React.Component {
 
   render() {
-    console.log(this.props);
     return (
       <section className="jumbotron text-center">
         <div className="container">

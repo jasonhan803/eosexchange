@@ -71,7 +71,8 @@ module.exports.addSale = (event, context, callback) => {
     Item : {
 			saleId : uuidv4(),
       sellerId: body.sale.user,
-      status: 'initial',
+      buyerId: '',
+      sale_status: 'initial',
       paymentMethod: body.sale.paymentMethod,
       price: body.sale.price,
       minLimit: body.sale.minLimit,
@@ -89,7 +90,7 @@ module.exports.addSale = (event, context, callback) => {
 
     const sale = {
       saleId: params.Item.saleId,
-      status: params.Item.status,
+      sale_status: params.Item.sale_status,
       timeStamp: params.Item.dateCreated
     }
 
@@ -121,9 +122,6 @@ module.exports.addSale = (event, context, callback) => {
 		    callback(err, null);
 		} else {
         documentClient.update(sellerParams, function(err, data){
-          console.log(data);
-          console.log(err);
-          console.log('and made it here');
 
           const response = {
             statusCode: 200,
@@ -147,4 +145,44 @@ module.exports.addSale = (event, context, callback) => {
 		    //callback(null, response);
 		}
 	});
+};
+
+module.exports.updateSale = (event, context, callback) => {
+
+  const body = JSON.parse(event.body);
+  console.log(body);
+  // Updating 'Reserve' action adds Buyer to Sale Item and updates status to 'Reserve'
+  var params = {
+    TableName: 'Sales',
+    Key: {
+      "saleId": body.saleId
+    },
+    ReturnValues: 'UPDATED_NEW',
+    UpdateExpression: 'SET sale_status = :a, buyerId = :b',
+    ExpressionAttributeValues: {
+      ':a': body.action,
+      ':b': body.buyer,
+    }
+  }
+
+  documentClient.update(params, function(err, data){
+    console.log(data);
+    console.log(err);
+    const response = {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+        "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
+      },
+      body: JSON.stringify({
+          message: 'success'
+      }),
+    };
+
+    if (err) {
+        callback(err, null);
+    } else {
+        callback(null, response);
+    }
+  });
 };

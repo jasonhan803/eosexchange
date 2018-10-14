@@ -1,6 +1,7 @@
 import React from 'react';
 import Eos from 'eosjs';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 
 
 class Buying extends React.Component {
@@ -8,10 +9,10 @@ class Buying extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scatterRegistered: false,
       saleItem: {},
       usd: 0,
-      eos: 0
+      eos: 0,
+      toConfirmation: false
     };
   }
 
@@ -38,27 +39,39 @@ class Buying extends React.Component {
       httpEndpoint: 'http://jungle.cryptolions.io:18888',
       chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
     }
-    let eos = Eos(config);
 
-    let accountName='chnkyfirede1';
+    let eos = Eos(config);
+    let buyer = this.props.account.accountName; // current Account Name
+    let seller = this.state.saleItem.sellerId; // off of sale Item
 
     // Connect with the contract
     eos.contract('localeosxxxl').then(contract => {
-      const options = { authorization: [ accountName + `@active` ] };
+      const options = { authorization: [ buyer + `@active` ] };
 
-      // Deposit funds to the contract
-      contract.reserve(accountName, "chnkyfiredev", "eosio.token", "1.0000 EOS", options)
+      // Reserves funds for current Buyer
+      contract.reserve(buyer, seller, "eosio.token", "1.0000 EOS", options)
       .then(results => {
-        console.log(results);
-        // Let's just add this amount to the DB balance
-        /*axios.put(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sellers`, { balance, accountName })
-          .then(res => {
+
+        // Change status of Sale and add Buyer to Sale Item
+        axios.put(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`, {
+          saleId: this.state.saleItem.saleId,
+          action: 'reserve',
+          buyer
+        }).then(res => {
+            // add Buyer to table and add Sale Info to Buyer
             if (res.data.message === "success") {
-              this.setState(() => ({
-                toConfirmation: true
-              }))
+              axios.post(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/buyers`, {
+                saleId: this.state.saleItem.saleId,
+                buyer
+              }).then(res => {
+                  if (res.data.message === "success") {
+                    this.setState(() => ({
+                      toConfirmation: true
+                    }))
+                  }
+                })
             }
-          })*/
+          })
       }).catch(error => {
         console.log(error);
       })
@@ -72,15 +85,21 @@ class Buying extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales/` + this.props.id)
+    axios.get(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales/` + this.props.saleId)
       .then(res => {
         this.setState({ saleItem: res.data.Item })
       })
   }
 
-
   render() {
-    console.log(this.state);
+    // Need a check for sale_status... make sure we're only showing 'active'
+    if (this.state.toConfirmation === true) {
+      return <Redirect to={{
+        pathname: "/confirmation",
+        state: { user: this.props.identity.accounts[0].name, balance: this.props.account.actualBalance}
+      }} />
+    }
+
     return (
       <div className="row mb-4">
         <div className="col-md-6 col-centered">

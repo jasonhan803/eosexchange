@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 
-class Sale extends React.Component {
+class DealInfo extends React.Component {
 
   constructor(props) {
     super(props);
@@ -30,12 +30,13 @@ class Sale extends React.Component {
     const saleItem = this.state.saleItem;
     return (
         <div>
+          <h2>Individual Sale Info</h2>
           {this.state.saleItem &&
-            <p>{saleItem.dateCreated} - {saleItem.saleId} - {saleItem.status} - {saleItem.paymentMethod }</p>
+            <p>{saleItem.dateCreated} - {saleItem.saleId} - {saleItem.sale_status} - {saleItem.paymentMethod } - {saleItem.buyerId}</p>
           }
         </div>
     );
   }
 }
 
-export default Sale;
+export default DealInfo;
