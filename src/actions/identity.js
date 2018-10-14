@@ -25,3 +25,10 @@ export const updateAccount = (accountDetails) => dispatch => {
   payload: accountDetails
  })
 }
+
+export const updateBalance = (newBalance) => dispatch => {
+ dispatch({
+  type: 'UPDATE_BALANCE',
+  payload: newBalance
+ })
+}

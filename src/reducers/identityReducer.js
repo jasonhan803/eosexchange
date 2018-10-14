@@ -15,6 +15,14 @@ export default (state = defaultState, action) => {
    return { ...state, identity: action.payload };
   case 'UPDATE_ACCOUNT':
    return { ...state, account: action.payload };
+  case 'UPDATE_BALANCE':
+    return { ...state, account: {
+      ...state.account,
+      actualBalance: action.payload.newActualBalance,
+      salesBalance: action.payload.newSalesBalance,
+    },
+
+  };
   default:
    return state
  }

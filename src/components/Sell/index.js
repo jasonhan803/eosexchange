@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Selling from './../../components/Selling';
-import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
+import { updateBalance } from './../../actions/identity';
 
 class Sell extends React.Component {
 
@@ -12,14 +12,8 @@ class Sell extends React.Component {
     };
   }
 
-  scatterResults = (registered, identity) => {
-    this.props.updateIdentity(identity);
-    this.props.registerScatter();
-  }
-
-  contractResults = (registered, accountDetails) => {
-    this.props.updateAccount(accountDetails);
-    this.props.registerContract();
+  updateBalance = (newBalance) => {
+    this.props.updateBalance(newBalance);
   }
 
   render() {
@@ -29,8 +23,7 @@ class Sell extends React.Component {
       contractRegistered: this.props.identity.contractRegistered,
       account: this.props.identity.account,
       type: 'Sell',
-      scatterCallback: this.scatterResults,
-      contractCallback: this.contractResults
+      balanceCallback: this.updateBalance
     }
 
     return (
@@ -48,10 +41,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  registerScatter: () => dispatch(registerScatter()),
-  registerContract: () => dispatch(registerContract()),
-  updateIdentity: (identity) => dispatch(updateIdentity(identity)),
-  updateAccount: (accountDetails) => dispatch(updateAccount(accountDetails))
+  updateBalance: (balanceDetails) => dispatch(updateBalance(balanceDetails))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sell);

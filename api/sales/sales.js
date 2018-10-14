@@ -86,16 +86,6 @@ module.exports.addSale = (event, context, callback) => {
     console.log(data);
     console.log(err);
     console.log('made it here');
-    const response = {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
-        "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
-      },
-      body: JSON.stringify({
-          message: 'success'
-      }),
-    };
 
     const sale = {
       saleId: params.Item.saleId,
@@ -103,19 +93,27 @@ module.exports.addSale = (event, context, callback) => {
       timeStamp: params.Item.dateCreated
     }
 
+    console.log(params.Item.maxLimit);
+    console.log(params.Item.price);
+    let adjustedBalance = (params.Item.maxLimit/params.Item.price);
+
+    console.log(adjustedBalance);
+
+    // Deduct the max amount * price/EOS from the balance.  create that in a pendingBalance
     var sellerParams = {
       TableName: 'Sellers',
       Key: {
         "accountName": body.sale.user
       },
       ReturnValues: 'UPDATED_NEW',
-      UpdateExpression: 'set #sales = list_append(if_not_exists(#sales, :empty_list), :sale)',
+      UpdateExpression: 'SET #sales = list_append(if_not_exists(#sales, :empty_list), :sale), salesBalance = salesBalance + :b, actualBalance = actualBalance - :b',
       ExpressionAttributeNames: {
         '#sales': 'sales'
       },
       ExpressionAttributeValues: {
         ':sale': [sale],
-        ':empty_list': []
+        ':empty_list': [],
+        ':b': adjustedBalance
       }
     }
 
@@ -126,6 +124,20 @@ module.exports.addSale = (event, context, callback) => {
           console.log(data);
           console.log(err);
           console.log('and made it here');
+
+          const response = {
+            statusCode: 200,
+            headers: {
+              "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+              "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
+            },
+            body: JSON.stringify({
+                message: 'success',
+                newActualBalance: data.Attributes.actualBalance,
+                newSalesBalance: data.Attributes.salesBalance
+            }),
+          };
+
           if (err) {
       		    callback(err, null);
       		} else {

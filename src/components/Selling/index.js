@@ -11,7 +11,7 @@ class Selling extends React.Component {
       paymentMethod: 'cash',
       price: 5,
       minLimit: 5,
-      maxLimit: 50,
+      maxLimit: 15,
       toConfirmation: false
     };
   }
@@ -47,6 +47,9 @@ class Selling extends React.Component {
     axios.post(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`, { sale })
       .then(res => {
         if (res.data.message === "success") {
+          console.log(res.data);
+
+          this.props.balanceCallback(res.data);
           this.setState(() => ({
             toConfirmation: true
           }))
@@ -62,14 +65,15 @@ class Selling extends React.Component {
     if (this.state.toConfirmation === true) {
       return <Redirect to={{
         pathname: "/confirmation",
-        state: { user: this.props.identity.accounts[0].name }
+        state: { user: this.props.identity.accounts[0].name, balance:  this.props.account.actualBalance}
       }} />
     }
 
     return (
         <div>
-          <div className="row mb-4">
+          <div className="row mb-4 mt-4">
             <div className="col-md-4 col-centered">
+            <p>EOS Available: {this.props.account.actualBalance}</p>
             <form onSubmit={this.handleSubmit}>
                 <div className="mb-3">
               <label>
@@ -79,7 +83,7 @@ class Selling extends React.Component {
                 </div>
                 <div className="mb-3">
               <label>
-                Price:
+                Price/EOS:
               </label>
                 <input type="text" className="form-control" value={this.state.price} name="price" onChange={this.handleChange} />
                 </div>
