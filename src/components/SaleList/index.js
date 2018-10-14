@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import ReactTable from "react-table";
-import 'react-table/react-table.css'
+import 'react-table/react-table.css';
 
 class SaleList extends React.Component {
   constructor(props) {
@@ -16,8 +17,11 @@ class SaleList extends React.Component {
   componentDidMount() {
     axios.get(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`)
       .then(res => {
+        // Filter out all Sale Items that does not include the current user
+        // Make a login button so deploying scatter is user initiated
+        const result = res.data.Items.filter(saleItem => saleItem.sellerId !== this.props.identity.account.accountName);
         this.setState(() => ({
-          sellers: res.data.Items
+          sellers: result
         }))
       })
   }
@@ -67,4 +71,8 @@ class SaleList extends React.Component {
   }
 }
 
-export default SaleList;
+const mapStateToProps = state => ({
+  identity: state.identityReducer
+})
+
+export default connect(mapStateToProps)(SaleList);

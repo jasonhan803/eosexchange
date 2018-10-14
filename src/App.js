@@ -7,8 +7,10 @@ import BuySell from './components/BuySell'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Confirmation from './components/Confirmation'
+import Dashboard from './components/Dashboard'
+import Sale from './components/Sale'
 import Sell from './components/Sell'
-import TransferForm from './components/TransferForm'
+import Transfer from './components/Transfer'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,8 +27,10 @@ class App extends Component {
               <Route exact path="/sell" component={Sell} />
               <Route exact path="/buy" component={SaleList} />
               <Route exact path="/buy/:id" component={Buy} />
-              <Route exact path="/transfer" component={TransferForm} />
+              <Route exact path="/transfer" component={Transfer} />
               <Route exact path="/confirmation" component={Confirmation} />
+              <Route exact path="/dashboard" component={Dashboard} />
+              <Route exact path="/dashboard/:id" component={Sale} />
             </Switch>
           </main>
           <Footer />

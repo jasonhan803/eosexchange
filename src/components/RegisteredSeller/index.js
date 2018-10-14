@@ -1,6 +1,7 @@
 import React from 'react';
 import Eos from 'eosjs';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 // User needs to register in the contract and on the DB
@@ -77,7 +78,7 @@ class RegisteredSeller extends React.Component {
     return (
           <div>
           {this.props.contractRegistered &&
-              <a className="nav-link" href="/">Welcome, {this.props.identity.accounts[0].name}</a>
+              <Link className="nav-link" to="/dashboard">Welcome, {this.props.identity.accounts[0].name}</Link>
           }
           {!this.props.contractRegistered &&
               <a className="nav-link" href="/">Register with Contract</a>

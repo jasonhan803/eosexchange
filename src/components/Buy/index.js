@@ -1,8 +1,6 @@
 import React from 'react';
 import Buying from './../../components/Buying'
 import { connect } from 'react-redux';
-import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
-
 
 class Buy extends React.Component {
   constructor(props) {
@@ -12,17 +10,6 @@ class Buy extends React.Component {
       saleId: ''
     };
   }
-
-  scatterResults = (registered, identity) => {
-    this.props.updateIdentity(identity);
-    this.props.registerScatter();
-  }
-
-  contractResults = (registered, accountDetails) => {
-    this.props.updateAccount(accountDetails);
-    this.props.registerContract();
-  }
-
 
   render() {
 
@@ -43,11 +30,4 @@ const mapStateToProps = state => ({
   identity: state.identityReducer
 })
 
-const mapDispatchToProps = dispatch => ({
-  registerScatter: () => dispatch(registerScatter()),
-  registerContract: () => dispatch(registerContract()),
-  updateIdentity: (identity) => dispatch(updateIdentity(identity)),
-  updateAccount: (accountDetails) => dispatch(updateAccount(accountDetails))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Buy);
+export default connect(mapStateToProps)(Buy);

@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Eos from 'eosjs';
-import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 
 
-class TransferForm extends React.Component {
+class Transfer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -14,16 +13,6 @@ class TransferForm extends React.Component {
       transferAmount: 0,
       toConfirmation: false
     };
-  }
-
-  scatterResults = (registered, identity) => {
-    this.props.updateIdentity(identity);
-    this.props.registerScatter();
-  }
-
-  contractResults = (registered, accountDetails) => {
-    this.props.updateAccount(accountDetails);
-    this.props.registerContract();
   }
 
   handleChange = (event) => {
@@ -95,7 +84,6 @@ class TransferForm extends React.Component {
               </div>
             </div>
         }
-
       </div>
     );
   }
@@ -105,11 +93,4 @@ const mapStateToProps = state => ({
   identity: state.identityReducer
 })
 
-const mapDispatchToProps = dispatch => ({
-  registerScatter: () => dispatch(registerScatter()),
-  registerContract: () => dispatch(registerContract()),
-  updateIdentity: (identity) => dispatch(updateIdentity(identity)),
-  updateAccount: (accountDetails) => dispatch(updateAccount(accountDetails))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(TransferForm);
+export default connect(mapStateToProps)(Transfer);
