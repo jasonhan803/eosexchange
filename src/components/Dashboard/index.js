@@ -12,7 +12,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-
+    console.log('why though');
     return (
         <div id="container">
           {this.props.identity.contractRegistered &&

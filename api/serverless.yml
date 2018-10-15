@@ -129,6 +129,15 @@ functions:
           method: put
           cors: true
 
+  getBuyer:
+    handler: buyers/buyers.getBuyer
+
+    events:
+      - http:
+          path: buyers/{id}
+          method: get
+          cors: true
+
   addBuyer:
     handler: buyers/buyers.addBuyer
 

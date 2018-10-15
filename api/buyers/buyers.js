@@ -62,7 +62,7 @@ module.exports.addBuyer = (event, context, callback) => {
 
     if (err) {
       if (err.code === "ConditionalCheckFailedException") {
-        console.log('Already Exists');
+        console.log('Buyer Already Exists');
         addSaleToBuyer(purchaseParams);
       } else {
         callback(err, null);
@@ -71,4 +71,48 @@ module.exports.addBuyer = (event, context, callback) => {
       addSaleToBuyer(purchaseParams)
 		}
 	});
+};
+
+module.exports.getBuyer = (event, context, callback) => {
+  var params = {
+		TableName : 'Buyers'
+	};
+
+  const response = {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin" : "*", // Required for CORS support to work
+      "Access-Control-Allow-Credentials" : true // Required for cookies, authorization headers with HTTPS
+    }
+  };
+
+  console.log(event);
+  if (event.pathParameters != null) {
+    params.Key = {'accountName': event.pathParameters.id}
+
+    documentClient.get(params, function(err, data){
+      console.log(data);
+
+      response.body = JSON.stringify(data);
+
+  		if (err) {
+  		    callback(err, null);
+  		} else {
+  		    callback(null, response);
+  		}
+  	});
+  } else {
+
+    documentClient.scan(params, function(err, data){
+      console.log(data);
+
+      response.body = JSON.stringify(data);
+
+  		if (err) {
+  		    callback(err, null);
+  		} else {
+  		    callback(null, response);
+  		}
+  	});
+  }
 };

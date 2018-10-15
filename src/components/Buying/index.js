@@ -51,6 +51,7 @@ class Buying extends React.Component {
       // Reserves funds for current Buyer
       contract.reserve(buyer, seller, "eosio.token", "1.0000 EOS", options)
       .then(results => {
+        console.log(results);
 
         // Change status of Sale and add Buyer to Sale Item
         axios.put(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`, {

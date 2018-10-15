@@ -1,4 +1,5 @@
 import React from 'react';
+import eosLogo from './../../images/eos_logo.svg';
 
 class BuySell extends React.Component {
 
@@ -6,6 +7,7 @@ class BuySell extends React.Component {
     return (
       <section className="jumbotron text-center">
         <div className="container">
+          <img className="d-block mx-auto mb-4" src={eosLogo} alt="" width="72" height="72" />
           <h1 className="jumbotron-heading">EOS Exchange</h1>
           <p className="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks do not simply skip over it entirely.</p>
           <p>
