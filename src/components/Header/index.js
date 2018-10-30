@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Scatter from './../../components/Scatter';
 import { Link } from 'react-router-dom';
 import { registerScatter, updateIdentity, registerContract, updateAccount } from './../../actions/identity';
 
@@ -56,8 +55,13 @@ class Header extends React.Component {
       </ul>
       <ul className="navbar-nav navbar-right">
           <li className="nav-item">
-            <Scatter {...props} />
+            <Link className="nav-link" to="/wallet">{this.props.identity.scatterRegistered ? this.props.identity.identity.accounts[0].name : 'Wallet'}</Link>
           </li>
+          {this.props.identity.scatterRegistered &&
+            <li className="nav-item">
+              <Link className="nav-link" to="/dashboard">Dashboard</Link>
+            </li>
+          }
       </ul>
     </div>
     </nav>

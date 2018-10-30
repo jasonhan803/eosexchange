@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Eos from 'eosjs';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import RegisteredSeller from './../../components/RegisteredSeller';
+import { registerContract, updateAccount } from './../../actions/identity';
 
 
 class Transfer extends React.Component {
@@ -13,6 +15,11 @@ class Transfer extends React.Component {
       transferAmount: 0,
       toConfirmation: false
     };
+  }
+
+  contractResults = (registered, accountDetails) => {
+    this.props.updateAccount(accountDetails);
+    this.props.registerContract();
   }
 
   handleChange = (event) => {
@@ -59,6 +66,15 @@ class Transfer extends React.Component {
 
   render() {
 
+    const props = {
+      scatterRegistered: this.props.identity.scatterRegistered,
+      identity: this.props.identity.identity,
+      contractRegistered: this.props.identity.contractRegistered,
+      account: this.props.identity.account,
+      type: 'Transfer',
+      contractCallback: this.contractResults
+    }
+
     if (this.state.toConfirmation === true) {
       return <Redirect to={{
         pathname: "/confirmation",
@@ -66,24 +82,35 @@ class Transfer extends React.Component {
       }} />
     }
 
+    let transfer;
+
+    if (!this.props.identity.scatterRegistered) {
+      return <Redirect to={{
+        pathname: "/wallet"
+      }} />
+    } else if (this.props.identity.scatterRegistered && !this.props.identity.contractRegistered) {
+      transfer = <RegisteredSeller {...props} />
+    } else {
+      transfer = (
+        <section className="jumbotron text-center">
+          <div className="col-md-4 col-centered">
+            <form onSubmit={this.handleSubmit}>
+            <div className="mb-3">
+            <label>
+                Amount:
+             </label>
+             <p>*Only whole numbers less than 10 for now - need to fix</p>
+             <input type="text" value={this.state.amount} onChange={this.handleChange} />
+             </div>
+             <input type="submit" value="Transfer" />
+            </form>
+          </div>
+        </section>);
+    }
+
     return (
       <div id="container">
-        {this.props.identity.contractRegistered &&
-            <div className="row mb-4">
-              <div className="col-md-4 col-centered">
-                <form onSubmit={this.handleSubmit}>
-                <div className="mb-3">
-                <label>
-                    Amount:
-                 </label>
-                 <p>*Only whole numbers less than 10 for now - need to fix</p>
-                 <input type="text" value={this.state.amount} onChange={this.handleChange} />
-                 </div>
-                 <input type="submit" value="Transfer" />
-                </form>
-              </div>
-            </div>
-        }
+        {transfer}
       </div>
     );
   }
@@ -91,6 +118,12 @@ class Transfer extends React.Component {
 
 const mapStateToProps = state => ({
   identity: state.identityReducer
-})
+});
 
-export default connect(mapStateToProps)(Transfer);
+const mapDispatchToProps = dispatch => ({
+  registerContract: () => dispatch(registerContract()),
+  updateAccount: (accountDetails) => dispatch(updateAccount(accountDetails))
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Transfer);

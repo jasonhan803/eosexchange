@@ -12,7 +12,8 @@ class Buying extends React.Component {
       saleItem: {},
       usd: 0,
       eos: 0,
-      toConfirmation: false
+      toConfirmation: false,
+      toWallet: false
     };
   }
 
@@ -34,6 +35,12 @@ class Buying extends React.Component {
 
   handleSubmit = (event) => {
 
+    if (this.props.identity.accounts[0].name === undefined) {
+      this.setState(() => ({
+        toWallet: true
+      }))
+    }
+
     let config = {
       keyProvider: '5J2QfmKiwKB6NXrfnm2Y4FB3HhS8mqFGTzcSgFfz9TgRmqgDWdL', // What should this be for registering seller
       httpEndpoint: 'http://jungle.cryptolions.io:18888',
@@ -41,7 +48,7 @@ class Buying extends React.Component {
     }
 
     let eos = Eos(config);
-    let buyer = this.props.account.accountName; // current Account Name
+    let buyer = this.props.identity.accounts[0].name; // current Account Name from Scatter b/c to buy don't need to register
     let seller = this.state.saleItem.sellerId; // off of sale Item
 
     // Connect with the contract
@@ -51,7 +58,6 @@ class Buying extends React.Component {
       // Reserves funds for current Buyer
       contract.reserve(buyer, seller, "eosio.token", "1.0000 EOS", options)
       .then(results => {
-        console.log(results);
 
         // Change status of Sale and add Buyer to Sale Item
         axios.put(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sales`, {
@@ -101,8 +107,14 @@ class Buying extends React.Component {
       }} />
     }
 
+    if (this.state.toWallet === true) {
+      return <Redirect to={{
+        pathname: "/wallet"
+      }} />
+    }
+
     return (
-      <div className="row mb-4">
+      <section className="jumbotron text-center">
         <div className="col-md-6 col-centered">
           <div className="row">
             <div className="col-md-2 text-left">
@@ -141,7 +153,7 @@ class Buying extends React.Component {
             </form>
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 }

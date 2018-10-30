@@ -7,6 +7,7 @@ import BuySell from './components/BuySell'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Confirmation from './components/Confirmation'
+import Wallet from './components/Wallet'
 import Dashboard from './components/Dashboard'
 import DealInfo from './components/DealInfo'
 import Sell from './components/Sell'
@@ -31,6 +32,7 @@ class App extends Component {
               <Route exact path="/confirmation" component={Confirmation} />
               <Route exact path="/dashboard" component={Dashboard} />
               <Route exact path="/dashboard/:id" component={DealInfo} />
+              <Route exact path="/wallet" component={Wallet} />
             </Switch>
           </main>
           <Footer />

@@ -1,6 +1,8 @@
 import React from 'react';
 import ScatterJS from 'scatter-js/dist/scatter.cjs'; // CommonJS style
 import RegisteredSeller from './../../components/RegisteredSeller';
+import scatterLogo from './../../images/scatter.svg';
+import { Link } from 'react-router-dom';
 
 
 class Scatter extends React.Component {
@@ -49,16 +51,32 @@ class Scatter extends React.Component {
 
   render() {
     let userForm;
-    // Seller/Buyer is on Scatter
+    // User on Scatter
     if (this.props.scatterRegistered) {
       userForm = (
-          <RegisteredSeller {...this.props} />
+        <section className="jumbotron text-center">
+          <div className="container">
+            <h1 className="jumbotron-heading">Welcome, {this.props.identity.accounts[0].name}</h1>
+            <p>
+              <Link to="/buy" className="btn btn-primary my-2">Buy</Link>
+              <Link to="/sell" className="btn btn-secondary my-2">Sell</Link>
+            </p>
+          </div>
+        </section>
       )
     }
-    // Need to get on Scatter
+
+    // Not on Scatter
     else {
       userForm = (
-        <a className="nav-link" href="/">Scatter</a>)
+        <section className="jumbotron text-center">
+          <div className="container">
+            <img className="d-block mx-auto mb-4" src={scatterLogo} alt="" width="72" height="72" />
+            <h1 className="jumbotron-heading">You need Scatter to Login</h1>
+            <a href="https://get-scatter.com/" target="_blank" className="btn btn-primary my-2">Get Scatter</a>
+          </div>
+        </section>
+      )
     }
 
     return (

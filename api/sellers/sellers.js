@@ -59,7 +59,7 @@ module.exports.addSeller = (event, context, callback) => {
   console.log(body);
   var params = {
     Item : {
-			"accountName" : body.accountName,
+			"accountName" : body.name,
       "actualBalance": 0,
       "saleBalance": 0,
       "sales": []

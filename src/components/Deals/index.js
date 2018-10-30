@@ -21,7 +21,7 @@ class Deals extends React.Component {
   }
 
   componentDidMount() {
-    const user = this.props.account.accountName;
+    const user = this.props.identity.accounts[0].name;
     let sales, purchases = [];
     axios.get(`https://jn3133p6pk.execute-api.us-west-1.amazonaws.com/dev/sellers/` + user )
     .then(res => {
@@ -41,10 +41,11 @@ class Deals extends React.Component {
 
   render() {
     console.log(this.state);
+    console.log(this.props);
     return (
         <div>
           <h2>Selling Deals</h2>
-          {this.props.identity.contractRegistered &&
+          {
             this.state.sales.map((sale) =>
               <p key={sale.saleId}><Link to={"/dashboard/" + sale.saleId}>{sale.saleId}</Link></p>)
           }

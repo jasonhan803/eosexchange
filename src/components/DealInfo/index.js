@@ -25,25 +25,51 @@ class DealInfo extends React.Component {
       chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
     }
 
-    /*let eos = Eos(config);
-    let buyer = this.props.account.accountName; // current Account Name
+    let eos = Eos(config);
+    let buyer = this.props.identity.identity.accounts[0].name; // current account name
 
     // Connect with the contract
     eos.contract('localeosxxxl').then(contract => {
       const options = { authorization: [ buyer + `@active` ] };
 
-      // Reserves funds for current Buyer
-      contract.ipaid(buyer, seller, "eosio.token", "1.0000 EOS", options)
+      // Tells the contract that the Buyer has sent the cash to the Seller
+      contract.ipaid(this.state.saleItem.dealId, options)
       .then(results => {
-
-
+        // Update the DB
+        // Need to change the status of the Sale to 'paid'
       }).catch(error => {
         console.log(error);
       })
-    })*/
-
-    // Update the DB
+    })
   }
+
+  moneyReceived = () => {
+    // Update the contract
+    let config = {
+      keyProvider: '5J2QfmKiwKB6NXrfnm2Y4FB3HhS8mqFGTzcSgFfz9TgRmqgDWdL', // What should this be for registering seller
+      httpEndpoint: 'http://jungle.cryptolions.io:18888',
+      chainId: '038f4b0fc8ff18a4f0842a8f0564611f6e96e8535901dd45e43ac8691a1c4dca'
+    }
+
+    let eos = Eos(config);
+    let buyer = this.props.identity.identity.accounts[0].name; // current account name
+
+    // Connect with the contract
+    eos.contract('localeosxxxl').then(contract => {
+      const options = { authorization: [ buyer + `@active` ] };
+
+      // Tells the contract that the Buyer has sent the cash to the Seller
+      contract.igotpaid('7159877630084423268', options)
+      .then(results => {
+        // Update the DB
+        // Need to change the status of the Sale to 'received'
+      }).catch(error => {
+        console.log(error);
+      })
+    })
+  }
+
+
 
   componentDidMount() {
     const { match: { params } } = this.props;
@@ -67,7 +93,16 @@ class DealInfo extends React.Component {
           {this.state.saleItem &&
             <div>
               <p>{saleItem.dateCreated} - {saleItem.saleId} - {saleItem.sale_status} - {saleItem.paymentMethod } - {saleItem.buyerId}</p>
-              <div onClick={this.moneySent}>Paid</div>
+              { // If user is buyer and ...
+              }
+              {saleItem.sale_status === 'reserved' &&
+                <div onClick={this.moneySent}>Paid</div>
+              }
+              { // If user is seller and ...
+              }
+              {saleItem.sale_status === 'paid' &&
+                <div onClick={this.moneyReceived}>Received</div>
+              }
             </div>
           }
         </div>);

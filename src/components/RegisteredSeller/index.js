@@ -2,6 +2,7 @@ import React from 'react';
 import Eos from 'eosjs';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import eosLogo from './../../images/eos_logo.svg';
 
 
 // User needs to register in the contract and on the DB
@@ -77,11 +78,15 @@ class RegisteredSeller extends React.Component {
   render() {
     return (
           <div>
-          {this.props.contractRegistered &&
-              <Link className="nav-link" to="/dashboard">Welcome, {this.props.identity.accounts[0].name}</Link>
-          }
           {!this.props.contractRegistered &&
-              <a className="nav-link" href="/">Register with Contract</a>
+            <section className="jumbotron text-center">
+              <div className="container">
+                <img className="d-block mx-auto mb-4" src={eosLogo} alt="" width="72" height="72" />
+                <h1 className="jumbotron-heading">You need to Register with the site before you can Sell.</h1>
+                <p>Dont worry, its one click</p>
+                <a className="btn btn-primary my-2" onClick={this.registerSeller}>Register</a>
+              </div>
+            </section>
           }
           </div>
     );

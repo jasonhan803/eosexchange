@@ -70,8 +70,7 @@ class Selling extends React.Component {
     }
 
     return (
-        <div>
-          <div className="row mb-4 mt-4">
+          <section className="jumbotron text-center">
             <div className="col-md-4 col-centered">
             <p>EOS Available: {this.props.account.actualBalance}</p>
             <form onSubmit={this.handleSubmit}>
@@ -102,8 +101,7 @@ class Selling extends React.Component {
               <input type="submit" value="Create Sale" />
             </form>
             </div>
-          </div>
-        </div>
+          </section>
     );
   }
 }

@@ -12,10 +12,10 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    console.log('why though');
+    console.log(this.props);
     return (
         <div id="container">
-          {this.props.identity.contractRegistered &&
+          {this.props.identity.scatterRegistered &&
               <div>
                 <Deals {...this.props.identity}/>
               </div>

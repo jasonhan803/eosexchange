@@ -24,9 +24,7 @@ class Buy extends React.Component {
 
     return (
       <div id="container">
-        {this.props.identity.contractRegistered &&
           <Buying {...props} />
-        }
       </div>
     );
   }

@@ -32,18 +32,18 @@ module.exports.getSales = (event, context, callback) => {
   	});
   } else {
 
-    var params = {
-          ExpressionAttributeNames:{
-            "#status": "status"
-        },
-        ExpressionAttributeValues: {
-          ":status": "active"
-         },
-         FilterExpression: "#status = :status",
-        TableName: "Sales"
+    var aParams = {
+      TableName: "Sales",
+      FilterExpression: "#sale_status = :sale_status",
+      ExpressionAttributeNames:{
+        "#sale_status": "sale_status"
+      },
+      ExpressionAttributeValues: {
+        ":sale_status": "active"
+       }
     }
 
-    documentClient.scan(params, function(err, data){
+    documentClient.scan(aParams, function(err, data){
       console.log(data);
       const response = {
         statusCode: 200,
@@ -66,12 +66,12 @@ module.exports.getSales = (event, context, callback) => {
 module.exports.addSale = (event, context, callback) => {
 
   const body = JSON.parse(event.body);
+  console.log(body);
 
   var params = {
     Item : {
 			saleId : uuidv4(),
       sellerId: body.sale.user,
-      buyerId: '',
       sale_status: 'initial',
       paymentMethod: body.sale.paymentMethod,
       price: body.sale.price,
@@ -84,15 +84,15 @@ module.exports.addSale = (event, context, callback) => {
 
   // Add Sale Item to Sale Table
   documentClient.put(params, function(err, data){
-    console.log(data);
-    console.log(err);
     console.log('made it here');
 
     const sale = {
-      saleId: params.Item.saleId,
-      sale_status: params.Item.sale_status,
-      timeStamp: params.Item.dateCreated
+      saleId: params.Item.saleId
     }
+
+    console.log(sale);
+
+    console.log(body.sale.user);
 
     console.log(params.Item.maxLimit);
     console.log(params.Item.price);
@@ -118,10 +118,15 @@ module.exports.addSale = (event, context, callback) => {
       }
     }
 
+
+
 		if (err) {
 		    callback(err, null);
 		} else {
+        console.log('Created the Sale Succesfully...');
         documentClient.update(sellerParams, function(err, data){
+          console.log(data);
+          console.log(err);
 
           const response = {
             statusCode: 200,
@@ -151,6 +156,7 @@ module.exports.updateSale = (event, context, callback) => {
 
   const body = JSON.parse(event.body);
   console.log(body);
+
   // Updating 'Reserve' action adds Buyer to Sale Item and updates status to 'Reserve'
   var params = {
     TableName: 'Sales',
